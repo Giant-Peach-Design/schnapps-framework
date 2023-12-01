@@ -1,0 +1,20 @@
+{
+  "name": "giantpeach/schnapps-framework",
+  "description": "Boilerplating for Peach Schnapps theme framework",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Giantpeach\\Schnapps\\Framework\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Giant Peach"
+    }
+  ],
+  "require": {
+    "giantpeach/config": "^1.0",
+    "giantpeach/query": "^1.0",
+    "giantpeach/images": "^1.1"
+  }
+}
