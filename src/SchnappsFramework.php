@@ -40,6 +40,20 @@ class SchnappsFramework
 
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorStylesheets']);
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorScripts']);
+
+    add_action('wp_head', function () {
+      if (Config::get('seo.analytics.ga')) {
+        echo '<!-- Google tag (gtag.js) -->
+              <script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::get('seo.analytics.ga') . '"></script>
+              <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag("js", new Date());
+
+                gtag("config", "' . Config::get('seo.analytics.ga') . '");
+              </script>';
+      }
+    });
   }
 
   public function setupFilters(): void
