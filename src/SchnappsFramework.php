@@ -66,6 +66,12 @@ class SchnappsFramework
               <!-- End Google Tag Manager -->';
       }
     });
+
+    add_action('after_setup_theme', function () {
+      // need to add colors here, be good to get them
+      // from the Tailwind config.
+      add_theme_support('custom-spacing');
+    });
   }
 
   public function setupFilters(): void
