@@ -38,9 +38,200 @@ class SchnappsFramework
 
     add_action('wp_enqueue_scripts', [$this, 'stylesheets']);
     add_action('wp_enqueue_scripts', [$this, 'scripts']);
+    add_action('wp_enqueue_scripts', [$this, 'processScripts']);
 
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorStylesheets']);
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorScripts']);
+
+    if (function_exists("acf_add_options_page")) {
+      \acf_add_options_page([
+        "page_title" => "Scripts",
+        "menu_title" => "Scripts",
+        "menu_slug" => "scripts",
+        "capability" => "edit_posts",
+        "redirect" => false,
+      ]);
+    }
+
+    add_action("acf/include_fields", function () {
+      if (!function_exists("acf_add_local_field_group")) {
+        return;
+      }
+
+      acf_add_local_field_group([
+        "key" => "scripts_group",
+        "title" => "Scripts",
+        "fields" => [
+          [
+            "key" => "field_65c232c87e9c1",
+            "label" => "Scripts",
+            "name" => "scripts",
+            "aria-label" => "",
+            "type" => "repeater",
+            "instructions" => "",
+            "required" => 0,
+            "conditional_logic" => 0,
+            "wrapper" => [
+              "width" => "",
+              "class" => "",
+              "id" => "",
+            ],
+            "layout" => "block",
+            "pagination" => 0,
+            "min" => 0,
+            "max" => 0,
+            "collapsed" => "",
+            "button_label" => "Add Script",
+            "rows_per_page" => 20,
+            "sub_fields" => [
+              [
+                "key" => "field_65c232eb7e9c2",
+                "label" => "Src",
+                "name" => "src",
+                "aria-label" => "",
+                "type" => "text",
+                "instructions" => "",
+                "required" => 0,
+                "conditional_logic" => [
+                  [
+                    [
+                      "field" => "field_65c233747e9c5",
+                      "operator" => "==empty",
+                    ],
+                  ],
+                ],
+                "wrapper" => [
+                  "width" => "",
+                  "class" => "",
+                  "id" => "",
+                ],
+                "default_value" => "",
+                "maxlength" => "",
+                "placeholder" => "",
+                "prepend" => "",
+                "append" => "",
+                "parent_repeater" => "field_65c232c87e9c1",
+              ],
+              [
+                "key" => "field_65c233747e9c5",
+                "label" => "Snippet",
+                "name" => "snippet",
+                "aria-label" => "",
+                "type" => "textarea",
+                "instructions" => "",
+                "required" => 0,
+                "conditional_logic" => [
+                  [
+                    [
+                      "field" => "field_65c232eb7e9c2",
+                      "operator" => "==empty",
+                    ],
+                  ],
+                ],
+                "wrapper" => [
+                  "width" => "",
+                  "class" => "",
+                  "id" => "",
+                ],
+                "default_value" => "",
+                "maxlength" => "",
+                "rows" => "",
+                "placeholder" => "",
+                "new_lines" => "",
+                "parent_repeater" => "field_65c232c87e9c1",
+              ],
+              [
+                "key" => "field_65c233237e9c4",
+                "label" => "Load",
+                "name" => "load",
+                "aria-label" => "",
+                "type" => "select",
+                "instructions" => "",
+                "required" => 0,
+                "conditional_logic" => [
+                  [
+                    [
+                      "field" => "field_65c232eb7e9c2",
+                      "operator" => "!=empty",
+                    ],
+                  ],
+                ],
+                "wrapper" => [
+                  "width" => "",
+                  "class" => "",
+                  "id" => "",
+                ],
+                "choices" => [
+                  "async" => "Async",
+                  "defer" => "Defer",
+                  "eager" => "Eager",
+                ],
+                "default_value" => "async",
+                "return_format" => "value",
+                "multiple" => 0,
+                "allow_null" => 0,
+                "ui" => 0,
+                "ajax" => 0,
+                "placeholder" => "",
+                "parent_repeater" => "field_65c232c87e9c1",
+              ],
+              [
+                "key" => "field_65c233fd0d664",
+                "label" => "Location",
+                "name" => "location",
+                "aria-label" => "",
+                "type" => "select",
+                "instructions" => "",
+                "required" => 0,
+                "conditional_logic" => [
+                  [
+                    [
+                      "field" => "field_65c233747e9c5",
+                      "operator" => "!=empty",
+                    ],
+                  ],
+                ],
+                "wrapper" => [
+                  "width" => "",
+                  "class" => "",
+                  "id" => "",
+                ],
+                "choices" => [
+                  "head" => "Head",
+                  "foot" => "Footer",
+                ],
+                "default_value" => "foot",
+                "return_format" => "value",
+                "multiple" => 0,
+                "allow_null" => 0,
+                "ui" => 0,
+                "ajax" => 0,
+                "placeholder" => "",
+                "parent_repeater" => "field_65c232c87e9c1",
+              ],
+            ],
+          ],
+        ],
+        "location" => [
+          [
+            [
+              "param" => "options_page",
+              "operator" => "==",
+              "value" => "scripts",
+            ],
+          ],
+        ],
+        "menu_order" => 0,
+        "position" => "normal",
+        "style" => "default",
+        "label_placement" => "top",
+        "instruction_placement" => "label",
+        "hide_on_screen" => "",
+        "active" => true,
+        "description" => "",
+        "show_in_rest" => 0,
+      ]);
+    });
 
     $themeDir = get_template_directory();
 
@@ -81,6 +272,71 @@ class SchnappsFramework
       // from the Tailwind config.
       add_theme_support('custom-spacing');
     });
+  }
+
+  public function processScripts(): void
+  {
+    $scripts = get_field("scripts", "option");
+
+    if (is_array($scripts)) {
+      foreach ($scripts as $script) {
+        if (!empty($script["src"])) {
+          // check if src snippet includes <script> tags and remove them, we just want the src attribute
+          $src = preg_replace(
+            "/<script.*?src=['\"](.*?)['\"].*?>.*?<\/script>/",
+            "$1",
+            $script["src"],
+          );
+
+          wp_enqueue_script(
+            handle: uniqid(),
+            src: $src,
+            deps: [],
+            ver: null,
+            args: [
+              "strategy" => $script["load"] ?? "defer",
+            ],
+          );
+        }
+
+        if (!empty($script["snippet"])) {
+          $uuid = uniqid();
+
+          wp_register_script(
+            handle: $uuid,
+            src: null,
+            deps: [],
+            ver: null,
+            args: [
+              "in_footer" => $script["location"] === "foot",
+            ],
+          );
+
+          wp_enqueue_script(
+            handle: $uuid,
+            src: null,
+            deps: [],
+            ver: null,
+            args: [
+              "in_footer" => $script["location"] === "foot",
+            ],
+          );
+
+          // check if snippet includes <script> tags and remove them
+          $snippet = preg_replace(
+            "/<script.*?>|<\/script>/",
+            "",
+            $script["snippet"],
+          );
+
+          wp_add_inline_script(
+            handle: $uuid,
+            data: $snippet,
+            position: "after",
+          );
+        }
+      }
+    }
   }
 
   public function setupFilters(): void
