@@ -46,7 +46,7 @@ class SchnappsFramework
 
     if (file_exists($themeDir . '/src/Components/head.twig')) {
       add_action('wp_head', function () use ($themeDir) {
-        Twiglet::getInstance()->display($themeDir . '/src/Components/head.twig');
+        Twiglet::getInstance()->display('head.twig');
       });
     }
 
