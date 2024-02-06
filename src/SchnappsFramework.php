@@ -7,6 +7,7 @@ use Giantpeach\Schnapps\Images\Images;
 use Giantpeach\Schnapps\Query\Cli\Cli as QueryCli;
 use Giantpeach\Schnapps\Theme\Blocks\Blocks;
 use Giantpeach\Schnapps\Theme\Routes\Api;
+use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 class SchnappsFramework
 {
@@ -40,6 +41,14 @@ class SchnappsFramework
 
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorStylesheets']);
     add_action('enqueue_block_editor_assets', [$this, 'blockEditorScripts']);
+
+    $themeDir = get_template_directory();
+
+    if (file_exists($themeDir . '/src/Components/head.twig')) {
+      add_action('wp_head', function () use ($themeDir) {
+        Twiglet::getInstance()->display($themeDir . '/src/Components/head.twig');
+      });
+    }
 
     add_action('wp_head', function () {
       if (Config::get('seo.analytics.ga')) {
