@@ -40,8 +40,8 @@ class SchnappsFramework
     add_action('wp_enqueue_scripts', [$this, 'scripts']);
     add_action('wp_enqueue_scripts', [$this, 'processScripts']);
 
-    add_action('enqueue_block_editor_assets', [$this, 'blockEditorStylesheets']);
-    add_action('enqueue_block_editor_assets', [$this, 'blockEditorScripts']);
+    add_action('enqueue_block_assets', [$this, 'blockEditorStylesheets']);
+    add_action('enqueue_block_assets', [$this, 'blockEditorScripts']);
 
     if (function_exists("acf_add_options_page")) {
       \acf_add_options_page([
