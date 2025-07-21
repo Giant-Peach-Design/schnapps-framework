@@ -245,18 +245,41 @@ class SchnappsFramework
 
         add_action('wp_head', function () {
             if (Config::get('seo.analytics.ga')) {
-                echo '<!-- Google tag (gtag.js) -->
-              <script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::get('seo.analytics.ga') . '"></script>
-              <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag("js", new Date());
+                if(Config::get('seo.cookie_consent')){
+                    echo '<!-- Google tag (gtag.js) -->
+                  <script type="text/plain" data-cookie-consent="tracking" async src="https://www.googletagmanager.com/gtag/js?id=' . Config::get('seo.analytics.ga') . '"></script>
+                  <script type="text/plain" data-cookie-consent="tracking">
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag("js", new Date());
 
-                gtag("config", "' . Config::get('seo.analytics.ga') . '");
-              </script>';
+                    gtag("config", "' . Config::get('seo.analytics.ga') . '");
+                  </script>';
+                } else {
+                    echo '<!-- Google tag (gtag.js) -->
+                  <script async src="https://www.googletagmanager.com/gtag/js?id=' . Config::get('seo.analytics.ga') . '"></script>
+                  <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag("js", new Date());
+
+                    gtag("config", "' . Config::get('seo.analytics.ga') . '");
+                  </script>';
+                }
             }
 
             if (Config::get('seo.tagmanager.gtm')) {
+                if(Config::get('seo.cookie_consent')){
+                    echo '<!-- Google Tag Manager -->
+                  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+                  <link rel="preload" href="https://www.googletagmanager.com/gtm.js?id=' . Config::get('seo.tagmanager.gtm') . '" as="script">
+                  <script type="text/plain" data-cookie-consent="tracking">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":
+                  new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
+                  "https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);
+                  })(window,document,"script","dataLayer","' . Config::get('seo.tagmanager.gtm') . '");</script>
+                  <!-- End Google Tag Manager -->';
+                } else {
                 echo '<!-- Google Tag Manager -->
               <link rel="dns-prefetch" href="https://www.googletagmanager.com">
               <link rel="preload" href="https://www.googletagmanager.com/gtm.js?id=' . Config::get('seo.tagmanager.gtm') . '" as="script">
@@ -266,6 +289,7 @@ class SchnappsFramework
               "https://www.googletagmanager.com/gtm.js?id="+i+dl;f.parentNode.insertBefore(j,f);
               })(window,document,"script","dataLayer","' . Config::get('seo.tagmanager.gtm') . '");</script>
               <!-- End Google Tag Manager -->';
+                }
             }
         });
 
