@@ -15,7 +15,7 @@
   "require": {
     "giantpeach/config": "^1.0",
     "giantpeach/query": "^1.0",
-    "giantpeach/images": "^1.1",
+    "giantpeach/images": "dev-3.0",
     "giantpeach/twiglet": "^1.0"
   }
 }
