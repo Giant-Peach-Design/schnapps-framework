@@ -16,6 +16,6 @@
     "giantpeach/config": "^1.0",
     "giantpeach/query": "^1.0",
     "giantpeach/images": "3.0.x-dev",
-    "giantpeach/twiglet": "^1.0"
+    "giantpeach/twiglet": "3.0.x-dev"
   }
 }
