@@ -28,7 +28,7 @@ class SchnappsFramework
         Config::load();
         new QueryCli();
         Images::getInstance();
-        \add_action('init', [$this, 'createThemeOptionsPage']);
+        add_action('init', [$this, 'createThemeOptionsPage']);
     }
 
     public function setupTheme(): void
